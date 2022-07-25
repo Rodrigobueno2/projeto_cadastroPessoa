@@ -3,6 +3,7 @@ package com.elotech.testePratico.pessoa;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,18 +20,21 @@ public class PessoaController {
    private PessoaService service;
    
    @PostMapping
-   public Pessoa salvar(@RequestBody Pessoa pessoa) {
-	   return service.salvar(pessoa);
+   public ResponseEntity<Pessoa> salvar(@RequestBody Pessoa pessoa) {
+	    Pessoa p = service.salvar(pessoa);
+	    return ResponseEntity.ok(p);
    }
    
    @GetMapping
-   public List<Pessoa> listarPessoas(){
-	   return service.listarTodasPessoas();
+   public ResponseEntity<List<Pessoa>> listarPessoas(){
+	    List<Pessoa>pessoas = service.listarTodasPessoas();
+	    return ResponseEntity.ok(pessoas);
    }
    
    @GetMapping("/{id}")
-   public Pessoa listarPessoa(@PathVariable Long id ) {
-	   return service.listarPessoaPorId(id);
+   public ResponseEntity<Pessoa> listarPessoa(@PathVariable Long id ) {
+	    Pessoa pessoa = service.listarPessoaPorId(id);
+	    return ResponseEntity.ok(pessoa);
    }
    
    @DeleteMapping("/{id}")
@@ -39,10 +43,11 @@ public class PessoaController {
    }
    
    @PutMapping("/{id}")
-   public Pessoa atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+   public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
 	   if(!id.equals(pessoa.getId())) {
 		   throw new RuntimeException("O id da URL não é a correspondente da pessoa que deseja atualizar");
 	   }
-	   return service.atualizarPessoa(pessoa);
+	   Pessoa p = service.atualizarPessoa(pessoa);
+	   return ResponseEntity.ok(p);
    }
 }
